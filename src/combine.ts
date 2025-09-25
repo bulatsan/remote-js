@@ -4,7 +4,7 @@ type RemoteDataList<RemoteList extends readonly Remote<unknown>[]> = {
   [K in keyof RemoteList]: RemoteList[K] extends Remote<infer D> ? D : never;
 };
 
-export function join<RemoteList extends readonly Remote<unknown>[]>(
+export function combine<RemoteList extends readonly Remote<unknown>[]>(
   ...values: RemoteList
 ): Remote<RemoteDataList<RemoteList>> {
   let hasPending = false;

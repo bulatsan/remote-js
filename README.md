@@ -1,6 +1,6 @@
 ## @bulatlib/remote
 
-Typed helpers for remote data state: discriminated `Remote<T>` union with `pending`, `error`, `success`, plus `match` and `join` utilities.
+Typed helpers for remote data state: discriminated `Remote<T>` union with `pending`, `error`, `success`, plus `match` and `combine` utilities.
 
 ### Install
 
@@ -39,20 +39,20 @@ const out = match(success({ id: 1 }), {
 // => 'ok: 1'
 ```
 
-### join(...remotes)
+### combine(...remotes)
 
 Combine multiple `Remote`s into one. Precedence: any `error` → `error`; else if any `pending` → `pending`; otherwise `success` with a tuple of data.
 
 ```ts
-import { error, join, pending, success } from '@bulatlib/remote';
+import { combine, error, pending, success } from '@bulatlib/remote';
 
-join(error(new Error('x')), pending(), success(1));
+combine(error(new Error('x')), pending(), success(1));
 // => { status: 'error', ... }
 
-join(pending(), success(1));
+combine(pending(), success(1));
 // => { status: 'pending', ... }
 
-const r = join(success(1), success('x' as const));
+const r = combine(success(1), success('x' as const));
 // r.data has type [number, 'x']
 ```
 

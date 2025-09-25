@@ -1,12 +1,12 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
 
-import { join } from './join';
+import { combine } from './combine';
 import { type Remote, pending, error as remoteError, success } from './remote';
 
-describe('join', () => {
+describe('combine', () => {
   it('returns error if any input is error (error wins over pending)', () => {
     const err = new Error('boom');
-    const r = join(remoteError(err), pending(), success(1));
+    const r = combine(remoteError(err), pending(), success(1));
 
     expect(r.status).toBe('error');
     expect(r.isError).toBe(true);
@@ -15,7 +15,7 @@ describe('join', () => {
   });
 
   it('returns pending if any input is pending and no errors', () => {
-    const r = join(pending(), success(1), success(2));
+    const r = combine(pending(), success(1), success(2));
 
     expect(r.status).toBe('pending');
     expect(r.isPending).toBe(true);
@@ -28,7 +28,7 @@ describe('join', () => {
     const b = success('x' as const);
     const c = success({ id: 3 } as const);
 
-    const r = join(a, b, c);
+    const r = combine(a, b, c);
 
     expect(r.status).toBe('success');
     expect(r.isSuccess).toBe(true);
@@ -40,13 +40,13 @@ describe('join', () => {
   });
 
   it('preserves the order of inputs in resulting data tuple', () => {
-    const r = join(success('first'), success('second'), success('third'));
+    const r = combine(success('first'), success('second'), success('third'));
     expect(r.status).toBe('success');
     expect(r.data).toEqual(['first', 'second', 'third']);
   });
 
   it('no inputs -> success of empty tuple', () => {
-    const r = join();
+    const r = combine();
     expect(r.status).toBe('success');
     expect(r.data).toEqual([]);
     expectTypeOf(r).toEqualTypeOf<Remote<[]>>();
