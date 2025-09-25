@@ -1,6 +1,6 @@
 ## @bulatlib/remote
 
-Typed helpers for remote data state: discriminated `Remote<T>` union with `pending`, `error`, `success`, plus `match` and `combine` utilities.
+Typed helpers for remote data state: discriminated `Remote<T>` union with `pending`, `error`, `success`, plus `match`, `combine` and `map` utilities.
 
 ### Install
 
@@ -54,6 +54,23 @@ combine(pending(), success(1));
 
 const r = combine(success(1), success('x' as const));
 // r.data has type [number, 'x']
+```
+
+### map(remote, fn)
+
+Map data of a successful `Remote<T>` to `Remote<R>`; passes through `pending` and `error` unchanged.
+
+```ts
+import { type Remote, error, map, pending, success } from '@bulatlib/remote';
+
+map(success(2), (n) => n * 10);
+// => { status: 'success', data: 20, ... }
+
+map(pending() as Remote<number>, (n) => n * 10);
+// => { status: 'pending', ... }
+
+map(error(new Error('x')) as Remote<number>, (n) => n * 10);
+// => { status: 'error', ... }
 ```
 
 ### License

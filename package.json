@@ -1,7 +1,7 @@
 {
   "name": "@bulatlib/remote",
   "author": "bulatsan",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Remote data helper types and utilities for TypeScript",
   "license": "MIT",
   "private": false,
